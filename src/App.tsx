@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
+  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   useColorScheme,
   View,
 } from 'react-native';
@@ -11,46 +13,119 @@ import Icons from '../components/Icons';
 
 export default function App(): React.JSX.Element {
   const deviceColorScheme = useColorScheme();
-  const [iconState, setIconState] = useState('pencil');
+  const [playerTurn, setPlayerTurn] = useState('circle-o');
+  let playerChance: string[] = [
+    'pencil',
+    'pencil',
+    'pencil',
+    'pencil',
+    'pencil',
+    'pencil',
+    'pencil',
+    'pencil',
+    'pencil',
+  ];
+  const [playerChanceState, SetPlayerChanceState] = useState(playerChance);
+  const handlePress = (index: any) => {
+    playerChanceState[index] = playerTurn;
+    setPlayerTurn(prevState =>
+      prevState === 'circle-o' ? 'remove' : 'circle-o',
+    );
+  };
+  const handleGameReload = () => {
+    setPlayerTurn('circle-o');
+    SetPlayerChanceState(playerChance);
+  };
+
   return (
     <SafeAreaView style={[styleClass.mainWrapper]}>
       <View>
-        <Text style={styleClass.defaultText}>Your Turn</Text>
+        <Text style={styleClass.defaultText}>
+          Player's <Icons name={playerTurn} /> Turn
+        </Text>
         <View style={styleClass.gameBoard}>
           <View style={styleClass.gameRow}>
             <View style={styleClass.gameBox}>
-              <Icons name={iconState} />
+              <TouchableOpacity
+                onPress={() => {
+                  handlePress(0);
+                }}>
+                <Icons name={playerChanceState[0]} />
+              </TouchableOpacity>
             </View>
             <View style={styleClass.gameBox}>
-              <Icons name={iconState} />
+              <TouchableOpacity
+                onPress={() => {
+                  handlePress(1);
+                }}>
+                <Icons name={playerChanceState[1]} />
+              </TouchableOpacity>
             </View>
             <View style={styleClass.gameBox}>
-              <Icons name={iconState} />
+              <TouchableOpacity
+                onPress={() => {
+                  handlePress(2);
+                }}>
+                <Icons name={playerChanceState[2]} />
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styleClass.gameRow}>
             <View style={styleClass.gameBox}>
-              <Icons name={iconState} />
+              <TouchableOpacity
+                onPress={() => {
+                  handlePress(3);
+                }}>
+                <Icons name={playerChanceState[3]} />
+              </TouchableOpacity>
             </View>
             <View style={styleClass.gameBox}>
-              <Icons name={iconState} />
+              <TouchableOpacity
+                onPress={() => {
+                  handlePress(4);
+                }}>
+                <Icons name={playerChanceState[4]} />
+              </TouchableOpacity>
             </View>
             <View style={styleClass.gameBox}>
-              <Icons name={iconState} />
+              <TouchableOpacity
+                onPress={() => {
+                  handlePress(5);
+                }}>
+                <Icons name={playerChance[5]} />
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styleClass.gameRow}>
             <View style={styleClass.gameBox}>
-              <Icons name={iconState} />
+              <TouchableOpacity
+                onPress={() => {
+                  handlePress(6);
+                }}>
+                <Icons name={playerChanceState[6]} />
+              </TouchableOpacity>
             </View>
             <View style={styleClass.gameBox}>
-              <Icons name={iconState} />
+              <TouchableOpacity
+                onPress={() => {
+                  handlePress(7);
+                }}>
+                <Icons name={playerChanceState[7]} />
+              </TouchableOpacity>
             </View>
             <View style={styleClass.gameBox}>
-              <Icons name={iconState} />
+              <TouchableOpacity
+                onPress={() => {
+                  handlePress(8);
+                }}>
+                <Icons name={playerChanceState[8]} />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
+        <Pressable style={styleClass.button} onPress={() => handleGameReload()}>
+          <Text style={styleClass.btnText}>Reload Game</Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -90,121 +165,16 @@ const styleClass = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
+  button: {
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 8,
+    marginHorizontal: 36,
+    backgroundColor: '#8D3DAF',
+    marginTop: 40,
+  },
+  btnText: {
+    color: '#fff',
+    fontSize: 25,
+  },
 });
-
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-// import React from 'react';
-// import type {PropsWithChildren} from 'react';
-// import {
-//   SafeAreaView,
-//   ScrollView,
-//   StatusBar,
-//   StyleSheet,
-//   Text,
-//   useColorScheme,
-//   View,
-// } from 'react-native';
-
-// import {
-//   Colors,
-//   DebugInstructions,
-//   Header,
-//   LearnMoreLinks,
-//   ReloadInstructions,
-// } from 'react-native/Libraries/NewAppScreen';
-
-// type SectionProps = PropsWithChildren<{
-//   title: string;
-// }>;
-
-// function Section({children, title}: SectionProps): React.JSX.Element {
-//   const isDarkMode = useColorScheme() === 'dark';
-//   return (
-//     <View style={styles.sectionContainer}>
-//       <Text
-//         style={[
-//           styles.sectionTitle,
-//           {
-//             color: isDarkMode ? Colors.white : Colors.black,
-//           },
-//         ]}>
-//         {title}
-//       </Text>
-//       <Text
-//         style={[
-//           styles.sectionDescription,
-//           {
-//             color: isDarkMode ? Colors.light : Colors.dark,
-//           },
-//         ]}>
-//         {children}
-//       </Text>
-//     </View>
-//   );
-// }
-
-// function App(): React.JSX.Element {
-//   const isDarkMode = useColorScheme() === 'dark';
-
-//   const backgroundStyle = {
-//     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-//   };
-
-//   return (
-//     <SafeAreaView style={backgroundStyle}>
-//       <StatusBar
-//         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-//         backgroundColor={backgroundStyle.backgroundColor}
-//       />
-//       <ScrollView
-//         contentInsetAdjustmentBehavior="automatic"
-//         style={backgroundStyle}>
-//         <Header />
-//         <View
-//           style={{
-//             backgroundColor: isDarkMode ? Colors.black : Colors.white,
-//           }}>
-//           <Section title="Step One">
-//             Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-//             screen and then come back to see your edits.
-//           </Section>
-//           <Section title="See Your Changes">
-//             <ReloadInstructions />
-//           </Section>
-//           <Section title="Debug">
-//             <DebugInstructions />
-//           </Section>
-//           <Section title="Learn More">
-//             Read the docs to discover what to do next:
-//           </Section>
-//           <LearnMoreLinks />
-//         </View>
-//       </ScrollView>
-//     </SafeAreaView>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   sectionContainer: {
-//     marginTop: 32,
-//     paddingHorizontal: 24,
-//   },
-//   sectionTitle: {
-//     fontSize: 24,
-//     fontWeight: '600',
-//   },
-//   sectionDescription: {
-//     marginTop: 8,
-//     fontSize: 18,
-//     fontWeight: '400',
-//   },
-//   highlight: {
-//     fontWeight: '700',
-//   },
-// });
