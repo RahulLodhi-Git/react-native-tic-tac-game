@@ -28,11 +28,20 @@ export default function App(): React.JSX.Element {
   const [count, setCount] = useState(0);
   const [playerChanceState, SetPlayerChanceState] = useState(playerChance);
   const [winner, setWinner] = useState(null);
+  const [XPlayerHistory, setXPlayerHistory] = useState([]);
+  const [OPlayerHistory, setOPlayerHistory] = useState([]);
+
   const handlePress = (index: any) => {
     playerChanceState[index] = playerTurn;
-    setPlayerTurn(prevState =>
-      prevState === 'circle-o' ? 'remove' : 'circle-o',
-    );
+    if (playerTurn === 'circle-o') {
+      OPlayerHistory.unshift(index);
+    }
+    if (playerTurn === 'remove') {
+      XPlayerHistory.unshift(index);
+    }
+    setPlayerTurn(prevState => {
+      return prevState === 'circle-o' ? 'remove' : 'circle-o';
+    });
     setCount(prevState => prevState + 1);
   };
   const handleGameReload = () => {
@@ -40,6 +49,8 @@ export default function App(): React.JSX.Element {
     SetPlayerChanceState(playerChance);
     setWinner(0);
     setCount(0);
+    setXPlayerHistory([]);
+    setOPlayerHistory([]);
   };
 
   useEffect(() => {
@@ -112,7 +123,9 @@ export default function App(): React.JSX.Element {
     }
   };
 
-  console.log('wubber', playerChanceState, winner, count);
+  // console.log('wubber', playerChanceState, winner, count,XPlayerHistory,OPlayerHistory);
+  console.log('XPlayerHistory', XPlayerHistory);
+  console.log('OPlayerHistory', OPlayerHistory);
   return (
     <SafeAreaView style={[styleClass.mainWrapper]}>
       <View>
