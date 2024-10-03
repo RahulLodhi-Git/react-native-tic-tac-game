@@ -25,28 +25,118 @@ export default function App(): React.JSX.Element {
     'pencil',
     'pencil',
   ];
+  const [count, setCount] = useState(0);
   const [playerChanceState, SetPlayerChanceState] = useState(playerChance);
+  const [winner, setWinner] = useState(null);
   const handlePress = (index: any) => {
     playerChanceState[index] = playerTurn;
     setPlayerTurn(prevState =>
       prevState === 'circle-o' ? 'remove' : 'circle-o',
     );
+    setCount(prevState => prevState + 1);
   };
   const handleGameReload = () => {
     setPlayerTurn('circle-o');
     SetPlayerChanceState(playerChance);
+    setWinner(0);
+    setCount(0);
   };
 
+  useEffect(() => {
+    checkWinner();
+  }, [playerTurn]);
+
+  const checkWinner = () => {
+    if (
+      playerChanceState[0] === 'circle-o' &&
+      ((playerChanceState[4] === 'circle-o' &&
+        playerChanceState[8] === 'circle-o') ||
+        (playerChanceState[1] === 'circle-o' &&
+          playerChanceState[2] === 'circle-o') ||
+        (playerChanceState[3] === 'circle-o' &&
+          playerChanceState[6] === 'circle-o'))
+    ) {
+      setWinner('circle');
+    } else if (
+      playerChanceState[2] === 'circle-o' &&
+      ((playerChanceState[4] === 'circle-o' &&
+        playerChanceState[6] === 'circle-o') ||
+        (playerChanceState[5] === 'circle-o' &&
+          playerChanceState[8] === 'circle-o'))
+    ) {
+      setWinner('circle');
+    } else if (
+      playerChanceState[1] === 'circle-o' &&
+      playerChanceState[4] === 'circle-o' &&
+      playerChanceState[7] === 'circle-o'
+    ) {
+      setWinner('circle');
+    } else if (
+      playerChanceState[3] === 'circle-o' &&
+      playerChanceState[4] === 'circle-o' &&
+      playerChanceState[5] === 'circle-o'
+    ) {
+      setWinner('circle');
+    } else if (
+      playerChanceState[0] === 'remove' &&
+      ((playerChanceState[1] === 'remove' &&
+        playerChanceState[2] === 'remove') ||
+        (playerChanceState[4] === 'remove' &&
+          playerChanceState[8] === 'remove') ||
+        (playerChanceState[3] === 'remove' &&
+          playerChanceState[6] === 'remove'))
+    ) {
+      setWinner('remove');
+    } else if (
+      playerChanceState[2] === 'remove' &&
+      ((playerChanceState[4] && playerChanceState[6] === 'remove') ||
+        (playerChanceState[5] && playerChanceState[8] === 'remove'))
+    ) {
+      setWinner('remove');
+    } else if (
+      playerChanceState[1] === 'remove' &&
+      playerChanceState[4] === 'remove' &&
+      playerChanceState[7] === 'remove'
+    ) {
+      setWinner('remove');
+    } else if (
+      playerChanceState[3] === 'remove' &&
+      playerChanceState[4] === 'remove' &&
+      playerChanceState[5] === 'remove'
+    ) {
+      setWinner('remove');
+    } else if (!playerChanceState.includes('pencil') && count >= 8) {
+      setWinner('draw');
+    } else {
+      setWinner(0);
+    }
+  };
+
+  console.log('wubber', playerChanceState, winner, count);
   return (
     <SafeAreaView style={[styleClass.mainWrapper]}>
       <View>
-        <Text style={styleClass.defaultText}>
-          Player's <Icons name={playerTurn} /> Turn
-        </Text>
+        {!winner ? (
+          <Text style={styleClass.defaultText}>
+            Player's <Icons name={playerTurn} /> Turn
+          </Text>
+        ) : (
+          <Text style={styleClass.defaultText}>
+            {winner === 'draw'
+              ? 'Draw 😕😵‍💫🤔😓'
+              : `Congratulations ${winner?.toUpperCase()} 👋❤️❤️`}
+          </Text>
+        )}
+
         <View style={styleClass.gameBoard}>
           <View style={styleClass.gameRow}>
             <View style={styleClass.gameBox}>
               <TouchableOpacity
+                style={[
+                  styleClass.iconItem,
+                  playerChanceState[0] === 'circle-o' ? styleClass.circle : '',
+                  playerChanceState[0] === 'remove' ? styleClass.remove : '',
+                ]}
                 onPress={() => {
                   handlePress(0);
                 }}>
@@ -55,6 +145,11 @@ export default function App(): React.JSX.Element {
             </View>
             <View style={styleClass.gameBox}>
               <TouchableOpacity
+                style={[
+                  styleClass.iconItem,
+                  playerChanceState[1] === 'circle-o' ? styleClass.circle : '',
+                  playerChanceState[1] === 'remove' ? styleClass.remove : '',
+                ]}
                 onPress={() => {
                   handlePress(1);
                 }}>
@@ -63,6 +158,11 @@ export default function App(): React.JSX.Element {
             </View>
             <View style={styleClass.gameBox}>
               <TouchableOpacity
+                style={[
+                  styleClass.iconItem,
+                  playerChanceState[2] === 'circle-o' ? styleClass.circle : '',
+                  playerChanceState[2] === 'remove' ? styleClass.remove : '',
+                ]}
                 onPress={() => {
                   handlePress(2);
                 }}>
@@ -73,6 +173,11 @@ export default function App(): React.JSX.Element {
           <View style={styleClass.gameRow}>
             <View style={styleClass.gameBox}>
               <TouchableOpacity
+                style={[
+                  styleClass.iconItem,
+                  playerChanceState[3] === 'circle-o' ? styleClass.circle : '',
+                  playerChanceState[3] === 'remove' ? styleClass.remove : '',
+                ]}
                 onPress={() => {
                   handlePress(3);
                 }}>
@@ -81,6 +186,11 @@ export default function App(): React.JSX.Element {
             </View>
             <View style={styleClass.gameBox}>
               <TouchableOpacity
+                style={[
+                  styleClass.iconItem,
+                  playerChanceState[4] === 'circle-o' ? styleClass.circle : '',
+                  playerChanceState[4] === 'remove' ? styleClass.remove : '',
+                ]}
                 onPress={() => {
                   handlePress(4);
                 }}>
@@ -89,24 +199,42 @@ export default function App(): React.JSX.Element {
             </View>
             <View style={styleClass.gameBox}>
               <TouchableOpacity
+                style={[
+                  styleClass.iconItem,
+                  playerChanceState[5] === 'circle-o' ? styleClass.circle : '',
+                  playerChanceState[5] === 'remove' ? styleClass.remove : '',
+                ]}
                 onPress={() => {
                   handlePress(5);
                 }}>
-                <Icons name={playerChance[5]} />
+                <Icons name={playerChanceState[5]} />
               </TouchableOpacity>
             </View>
           </View>
           <View style={styleClass.gameRow}>
             <View style={styleClass.gameBox}>
               <TouchableOpacity
+                style={[
+                  styleClass.iconItem,
+                  playerChanceState[6] === 'circle-o' ? styleClass.circle : '',
+                  playerChanceState[6] === 'remove' ? styleClass.remove : '',
+                ]}
                 onPress={() => {
                   handlePress(6);
                 }}>
-                <Icons name={playerChanceState[6]} />
+                <Icons
+                  name={playerChanceState[6]}
+                  styleClass={styleClass.icon}
+                />
               </TouchableOpacity>
             </View>
             <View style={styleClass.gameBox}>
               <TouchableOpacity
+                style={[
+                  styleClass.iconItem,
+                  playerChanceState[7] === 'circle-o' ? styleClass.circle : '',
+                  playerChanceState[7] === 'remove' ? styleClass.remove : '',
+                ]}
                 onPress={() => {
                   handlePress(7);
                 }}>
@@ -115,6 +243,11 @@ export default function App(): React.JSX.Element {
             </View>
             <View style={styleClass.gameBox}>
               <TouchableOpacity
+                style={[
+                  styleClass.iconItem,
+                  playerChanceState[8] === 'circle-o' ? styleClass.circle : '',
+                  playerChanceState[8] === 'remove' ? styleClass.remove : '',
+                ]}
                 onPress={() => {
                   handlePress(8);
                 }}>
@@ -150,7 +283,7 @@ const styleClass = StyleSheet.create({
     paddingHorizontal: 40,
   },
   gameBox: {
-    width: '33%',
+    width: '33.33%',
     aspectRatio: 1,
     borderWidth: 1,
     borderColor: '#a855f7',
@@ -159,7 +292,7 @@ const styleClass = StyleSheet.create({
     alignItems: 'center',
   },
   defaultText: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
     color: '#2f3542',
     textAlign: 'center',
@@ -176,5 +309,17 @@ const styleClass = StyleSheet.create({
   btnText: {
     color: '#fff',
     fontSize: 25,
+  },
+  iconItem: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  circle: {
+    backgroundColor: '#8bec98',
+  },
+  remove: {
+    backgroundColor: '#f8a085',
   },
 });
